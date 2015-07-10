@@ -24,8 +24,14 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
     var state = scope.pagination = {
       page: -1,
       active: false,
-      clickNext: function() { locked || userChangePage(+1); },
-      clickPrevious: function() { locked || userChangePage(-1); }
+      clickNext: function() {
+        locked || userChangePage(+1);
+        scope.selectedIndex++;
+      },
+      clickPrevious: function() {
+        locked || userChangePage(-1);
+        scope.selectedIndex--;
+      }
     };
 
     scope.$on('$mdTabsChanged', debouncedUpdatePagination);
