@@ -145,6 +145,29 @@ function TabsDirective($mdTheming) {
       angular.element(element[0].querySelector('.md-header-items')).append(clone);
     });
 
+    function checkHeight() {
+      setTimeout(function() {
+        var w = angular.element(window),
+            wh = w.height(),
+            ww = w.width(),
+            hh = angular.element('.mobile-header').height(),
+            th = angular.element('.md-header').height(),
+            maxHeight = wh - hh - th,
+            tabsContent = angular.element(element).find('.md-tabs-content');
+        if (ww < 600 && tabsContent.height() > maxHeight) {
+          tabsContent.css({
+            maxHeight: maxHeight,
+            overflowY: 'scroll'
+          });
+        }
+        else {
+          tabsContent.removeAttr('style');
+        }
+      }, 1);
+    }
+
+    checkHeight();
+
     function configureAria() {
       element.attr('role', 'tablist');
     }
@@ -158,12 +181,13 @@ function TabsDirective($mdTheming) {
         if (tabsCtrl.inRange(newIndex)) {
           var newTab = tabsCtrl.itemAt(newIndex);
           while (newTab && newTab.isDisabled()) {
-            newTab = newIndex > oldIndex 
+            newTab = newIndex > oldIndex
                 ? tabsCtrl.next(newTab)
                 : tabsCtrl.previous(newTab);
           }
           tabsCtrl.select(newTab, rightToLeft);
         }
+        checkHeight();
       });
     }
   }
